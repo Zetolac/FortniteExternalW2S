@@ -1,7 +1,6 @@
 Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortnite 17.30
 {
 
-
 	auto one = read<uintptr_t>(DriverHandle, processID, Localplayer + 0xa8); // =
 	uint64_t two = read<uintptr_t>(DriverHandle, processID, one + 8);
 
