@@ -1,4 +1,4 @@
-Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortnite 17.30
+Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortnite 18.00
 {
 
 	auto one = read<uintptr_t>(DriverHandle, processID, Localplayer + 0xa8); // =
@@ -44,4 +44,4 @@ Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortni
 	CameraEXT = Camera;
 
 	return Screenlocation;
-}  // FTN.UE4 17.30
+}  // FTN.UE4 18.00
