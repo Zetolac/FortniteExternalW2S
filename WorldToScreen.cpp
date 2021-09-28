@@ -1,4 +1,4 @@
-Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortnite 18.00
+Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortnite 18.10
 {
 
 	auto one = read<uintptr_t>(DriverHandle, processID, Localplayer + 0xa8); // =
@@ -24,7 +24,7 @@ Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortni
 
 	uint64_t three = read<uint64_t>(DriverHandle, processID, Localplayer + 0x70);
 	uint64_t four = read<uint64_t>(DriverHandle, processID, three + 0x98);
-	uint64_t five = read<uint64_t>(DriverHandle, processID, four + 0x138);
+	uint64_t five = read<uint64_t>(DriverHandle, processID, four + 0x140);
 
 	Vector3 vDelta = WorldLocation - read<Vector3>(DriverHandle, processID, five + 0x10);
 	Vector3 vTransformed = Vector3(vDelta.Dot(vAxisY), vDelta.Dot(vAxisZ), vDelta.Dot(vAxisX));
@@ -44,4 +44,4 @@ Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortni
 	CameraEXT = Camera;
 
 	return Screenlocation;
-}  // FTN.UE4 18.00
+}  // FTN.UE4 18.10
