@@ -1,11 +1,11 @@
-Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortnite 18.10
+Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) //
 {
 
 	auto one = read<uintptr_t>(DriverHandle, processID, Localplayer + 0xa8); // =
 	uint64_t two = read<uintptr_t>(DriverHandle, processID, one + 8);
 
         Vector3 Camera;
-	Camera.x = read<float>(DriverHandle, processID, two + 0x7F8);
+	Camera.x = read<float>(DriverHandle, processID, two + 0x8F8);
 	Camera.y = read<float>(DriverHandle, processID, Rootcomp + 0x12C);  
 
 	float testing = asin(Camera.x);
@@ -32,7 +32,7 @@ Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortni
 	if (vTransformed.z < 1.f)
 		vTransformed.z = 1.f;
 
-	float zoom = read<float>(DriverHandle, processID, two + 0x590);
+	float zoom = read<float>(DriverHandle, processID, two + 0x580);
 
 	FovAngle = 80.0f / (zoom / 1.19f);
 	float ScreenCenterX = Width / 2.0f;
@@ -44,4 +44,4 @@ Vector3 ProjectionWorldToScreen(Vector3 WorldLocation, Vector3 camrot) // Fortni
 	CameraEXT = Camera;
 
 	return Screenlocation;
-}  // FTN.UE4 18.10
+}  // 
