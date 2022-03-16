@@ -13,6 +13,28 @@ float GetCameraComponentFOV(__int64 PlayerCameraManager)
 	return (float)FieldOfViewReturn;
 }
 
+float DecryptFOV()
+{
+	DWORD_PTR CameraCachePrivateFOV = read<DWORD_PTR>(PlayerCameraManager + 0x1C48);
+	if (CameraCachePrivateFOV == 4806466702312210432)
+		return 15.0f;
+	if (CameraCachePrivateFOV == 4806466702311161856)
+		return 40.0f;
+	if (CameraCachePrivateFOV == 4806466702319681536)
+		return 65.0f;
+	if (CameraCachePrivateFOV == 4806466702320992256)
+		return 75.0f;
+	if (CameraCachePrivateFOV == 4806466702319550464)
+		return 80.0f;
+	if (CameraCachePrivateFOV == 4806466703424487424)
+		return 90.0f;
+	if (CameraCachePrivateFOV == 4806466702322958336)
+		return 90.0f;
+	if (CameraCachePrivateFOV == 4806466703423700992)
+		return 90.0f;
+	
+}
+
 // https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Source/Runtime/Engine/Private/PlayerCameraManager.cpp#L835
 // PlayerCameraManager = PlayerController + 0x2C8
 namespace APlayerCameraManager
@@ -20,7 +42,7 @@ namespace APlayerCameraManager
 	float APlayerCameraManager::GetFOVAngle()
 	{
 		float LockedFOV = read<float>(PlayerCameraManager + 0x23c);
-		return (LockedFOV > 0.f) ? LockedFOV : GetCameraComponentFOV(PlayerCameraManager);
+		return (LockedFOV > 0.f) ? LockedFOV : GetCameraComponentFOV(PlayerCameraManager); // or you can use DecryptFOV();
 	}
 
 	void APlayerCameraManager::SetFOV(float NewFOV) 
@@ -67,7 +89,7 @@ Vector3 ProjectWorldToScreen(Vector3 WorldLocation)
 	if (vTransformed.z < 1.f)
 		vTransformed.z = 1.f;
 
-	float FovAngle = APlayerCameraManager::GetFOVAngle();
+	float FovAngle = APlayerCameraManager::GetFOVAngle(); 
 	float ScreenCenterX = Width / 2.0f; //  GetWindowRect(FortniteWindow, &GameRect); Width = GameRect.right - GameRect.left; 
 	float ScreenCenterY = Height / 2.0f; // GetWindowRect(FortniteWindow, &GameRect); Height = GameRect.bottom - GameRect.top;
 
