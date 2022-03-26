@@ -1,100 +1,50 @@
-
-float GetCameraComponentFOV(__int64 PlayerCameraManager)
+struct CamewaDescwipsion
 {
-	float FieldOfViewReturn = 90.f; // DefaultFOV
-	if (PlayerCameraManager) {
-		__int64 AnimCameraActor = read<__int64>(PlayerCameraManager + 0x29b8);
+	float FieldOfView;
+	Vector3 Rotation;
+	Vector3 Location;
+};
 
-		__int64 CameraComponent = read<__int64>(AnimCameraActor + 0x228);
-
-		FieldOfViewReturn = read<float>(CameraComponent + 0x1f0); // CameraComponent->FieldOfView
-	}
-
-	return (float)FieldOfViewReturn;
-}
-
-float DecryptFOV()
+CamewaDescwipsion UndetectedCamera(__int64 a1)
 {
-	DWORD_PTR CameraCachePrivateFOV = read<DWORD_PTR>(PlayerCameraManager + 0x1C48);
-	if (CameraCachePrivateFOV == 4806466702312210432)
-		return 15.0f;
-	if (CameraCachePrivateFOV == 4806466702311161856)
-		return 40.0f;
-	if (CameraCachePrivateFOV == 4806466702319681536)
-		return 65.0f;
-	if (CameraCachePrivateFOV == 4806466702320992256)
-		return 75.0f;
-	if (CameraCachePrivateFOV == 4806466702319550464)
-		return 80.0f;
-	if (CameraCachePrivateFOV == 4806466703424487424)
-		return 90.0f;
-	if (CameraCachePrivateFOV == 4806466702322958336)
-		return 90.0f;
-	if (CameraCachePrivateFOV == 4806466703423700992)
-		return 90.0f;
-	
-}
+	CamewaDescwipsion VirtualCamera;
+	__int64 v1;
+	__int64 v6;
+	__int64 v7;
+	__int64 v8;
 
-// https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Source/Runtime/Engine/Private/PlayerCameraManager.cpp#L835
-// PlayerCameraManager = PlayerController + 0x2C8
-namespace APlayerCameraManager
-{
-	float APlayerCameraManager::GetFOVAngle()
-	{
-		float LockedFOV = read<float>(PlayerCameraManager + 0x23c);
-		return (LockedFOV > 0.f) ? LockedFOV : GetCameraComponentFOV(PlayerCameraManager); // or you can use DecryptFOV();
-	}
+	v1 = read<__int64>(Localplayer + 0xC8);
+	__int64 v9 = read<__int64>(v1 + 8);
 
-	void APlayerCameraManager::SetFOV(float NewFOV) 
-	{
-		write<float>(PlayerCameraManager + 0x23c, NewFOV); // Detected ^^
-	}
+	VirtualCamera.FieldOfView = 80.f / (read<double>(v9 + 0x690) / 1.19f);
 
-	void APlayerCameraManager::UnlockFOV()
-	{
-		write<float>(PlayerCameraManager + 0x23c, 0.f);
-	}
+	VirtualCamera.Rotation.x = read<double>(v9 + 0x7E0);
+	VirtualCamera.Rotation.y = read<double>(a1 + 0x158);
+
+	v6 = read<__int64>(Localplayer + 0x70);
+	v7 = read<__int64>(v6 + 0x98);
+	v8 = read<__int64>(v7 + 0x180);
+
+	VirtualCamera.Location = read<Vector3>(v8 + 0x20);
+	return VirtualCamera;
 }
 
 Vector3 ProjectWorldToScreen(Vector3 WorldLocation)
 {
-	Vector3 Screenlocation = Vector3(0, 0, 0);
-	Vector3 Camera;
+	        CamewaDescwipsion vCamera = UndetectedCamera(RootComp);
+		vCamera.Rotation.x = (asin(vCamera.Rotation.x)) * (180.0 / M_PI);
 
-	auto chain69 = read<uintptr_t>(LocalPlayer + 0xa8);
-	uint64_t chain699 = read<uintptr_t>(chain69 + 8);
-	Camera.x = read<float>(chain699 + 0x8F8);
-	Camera.y = read<float>(RootComponent + 0x12C);
+		D3DMATRIX tempMatrix = Matrix(vCamera.Rotation);
+		
+		Vector3 vAxisX = Vector3(tempMatrix.m[0][0], tempMatrix.m[0][1], tempMatrix.m[0][2]);
+		Vector3 vAxisY = Vector3(tempMatrix.m[1][0], tempMatrix.m[1][1], tempMatrix.m[1][2]);
+		Vector3 vAxisZ = Vector3(tempMatrix.m[2][0], tempMatrix.m[2][1], tempMatrix.m[2][2]);
 
-	float test = asin(Camera.x);
-	float degrees = test * (180.0 / M_PI);
-	Camera.x = degrees;
+		Vector3 vDelta = WorldLocation - vCamera.Location;
+		Vector3 vTransformed = Vector3(vDelta.Dot(vAxisY), vDelta.Dot(vAxisZ), vDelta.Dot(vAxisX));
 
-	if (Camera.y < 0)
-		Camera.y = 360 + Camera.y;
+		if (vTransformed.z < 1.f)
+			vTransformed.z = 1.f;
 
-	D3DMATRIX tempMatrix = Matrix(Camera);
-	Vector3 vAxisX, vAxisY, vAxisZ;
-
-	vAxisX = Vector3(tempMatrix.m[0][0], tempMatrix.m[0][1], tempMatrix.m[0][2]);
-	vAxisY = Vector3(tempMatrix.m[1][0], tempMatrix.m[1][1], tempMatrix.m[1][2]);
-	vAxisZ = Vector3(tempMatrix.m[2][0], tempMatrix.m[2][1], tempMatrix.m[2][2]);
-
-	uint64_t chain = read<uint64_t>(LocalPlayer + 0x70);
-	uint64_t chain1 = read<uint64_t>(chain + 0x98);
-	uint64_t chain2 = read<uint64_t>(chain1 + 0x140);
-	Vector3 vDelta = WorldLocation - read<Vector3>(chain2 + 0x10); 
-	Vector3 vTransformed = Vector3(vDelta.Dot(vAxisY), vDelta.Dot(vAxisZ), vDelta.Dot(vAxisX));
-
-	if (vTransformed.z < 1.f)
-		vTransformed.z = 1.f;
-
-	float FovAngle = APlayerCameraManager::GetFOVAngle(); 
-	float ScreenCenterX = Width / 2.0f; //  GetWindowRect(FortniteWindow, &GameRect); Width = GameRect.right - GameRect.left; 
-	float ScreenCenterY = Height / 2.0f; // GetWindowRect(FortniteWindow, &GameRect); Height = GameRect.bottom - GameRect.top;
-
-	Screenlocation.x = ScreenCenterX + vTransformed.x * (ScreenCenterX / tanf(FovAngle * (float)M_PI / 360.f)) / vTransformed.z;
-	Screenlocation.y = ScreenCenterY - vTransformed.y * (ScreenCenterX / tanf(FovAngle * (float)M_PI / 360.f)) / vTransformed.z;
-
-	return Screenlocation;
+		return Vector3((Width / 2.0f) + vTransformed.x * (((Width / 2.0f) / tanf(vCamera.FieldOfView * (float)M_PI / 360.f))) / vTransformed.z, (Height / 2.0f) - vTransformed.y * (((Width / 2.0f) / tanf(vCamera.FieldOfView * (float)M_PI / 360.f))) / vTransformed.z,0);
 }
