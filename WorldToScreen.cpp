@@ -19,7 +19,7 @@ CamewaDescwipsion UndetectedCamera(__int64 a1)
 	VirtualCamera.FieldOfView = 80.f / (read<double>(v9 + 0x690) / 1.19f);
 
 	VirtualCamera.Rotation.x = read<double>(v9 + 0x7E0);
-	VirtualCamera.Rotation.y = read<double>(a1 + 0x158);
+        VirtualCamera.Rotation.y = read<double>(a1 + 0x148);
 
 	v6 = read<__int64>(Localplayer + 0x70);
 	v7 = read<__int64>(v6 + 0x98);
