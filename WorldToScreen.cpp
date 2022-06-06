@@ -22,7 +22,7 @@ Camera GetCamera(__int64 a1)
 
 	v6 = read<__int64>(Localplayer + 0x70);
 	v7 = read<__int64>(v6 + 0x98);
-	v8 = read<__int64>(v7 + 0xF0);
+	v8 = read<__int64>(v7 + 0xF8);
 
 	LocalCamera.Location = read<Vector3>(v8 + 0x20);
 	return VirtualCamera;
