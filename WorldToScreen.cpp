@@ -1,13 +1,13 @@
-struct CamewaDescwipsion
+struct Camera
 {
 	float FieldOfView;
 	Vector3 Rotation;
 	Vector3 Location;
 };
 
-CamewaDescwipsion UndetectedCamera(__int64 a1)
+Camera GetCamera(__int64 a1)
 {
-	CamewaDescwipsion VirtualCamera;
+	Camera LocalCamera;
 	__int64 v1;
 	__int64 v6;
 	__int64 v7;
@@ -16,22 +16,21 @@ CamewaDescwipsion UndetectedCamera(__int64 a1)
 	v1 = read<__int64>(Localplayer + 0xC8);
 	__int64 v9 = read<__int64>(v1 + 8);
 
-	VirtualCamera.FieldOfView = 80.f / (read<double>(v9 + 0x690) / 1.19f);
-
-	VirtualCamera.Rotation.x = read<double>(v9 + 0x7E0);
-        VirtualCamera.Rotation.y = read<double>(a1 + 0x148);
+	LocalCamera.FieldOfView = 80.f / (read<double>(v9 + 0x690) / 1.19f);
+	LocalCamera.Rotation.x = read<double>(v9 + 0x7E0);
+        LocalCamera.Rotation.y = read<double>(a1 + 0x148);
 
 	v6 = read<__int64>(Localplayer + 0x70);
 	v7 = read<__int64>(v6 + 0x98);
-	v8 = read<__int64>(v7 + 0x180);
+	v8 = read<__int64>(v7 + 0xF0);
 
-	VirtualCamera.Location = read<Vector3>(v8 + 0x20);
+	LocalCamera.Location = read<Vector3>(v8 + 0x20);
 	return VirtualCamera;
 }
 
 Vector3 ProjectWorldToScreen(Vector3 WorldLocation)
 {
-	        CamewaDescwipsion vCamera = UndetectedCamera(RootComp);
+	        Camera vCamera = GetCamera(RootComponent);
 		vCamera.Rotation.x = (asin(vCamera.Rotation.x)) * (180.0 / M_PI);
 
 		D3DMATRIX tempMatrix = Matrix(vCamera.Rotation);
