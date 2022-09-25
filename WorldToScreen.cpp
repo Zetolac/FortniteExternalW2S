@@ -13,18 +13,15 @@ Camera GetCamera(__int64 a1)
 	__int64 v7;
 	__int64 v8;
 
-	v1 = read<__int64>(Localplayer + 0xC8);
+	v1 = read<__int64>(Localplayer + 0xd0);
 	__int64 v9 = read<__int64>(v1 + 8);
 
-	LocalCamera.FieldOfView = 80.f / (read<double>(v9 + 0x690) / 1.19f);
-	LocalCamera.Rotation.x = read<double>(v9 + 0x7E0);
+	LocalCamera.FieldOfView = 80.f / (read<double>(v9 + 0x680) / 1.19f);
+	LocalCamera.Rotation.x = read<double>(v9 + 0x7D0);
         LocalCamera.Rotation.y = read<double>(a1 + 0x148);
 
-	v6 = read<__int64>(Localplayer + 0x70);
-	v7 = read<__int64>(v6 + 0x98);
-	v8 = read<__int64>(v7 + 0xF8);
+        LocalCamera.Location = read<Vector3>(read<__int64>(GWorld + 0x100));
 
-	LocalCamera.Location = read<Vector3>(v8 + 0x20);
 	return VirtualCamera;
 }
 
