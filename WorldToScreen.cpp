@@ -5,7 +5,7 @@ struct Camera
 	Vector3 Location;
 };
 
-Camera GetCamera(__int64 a1)
+Camera GetCamera()
 {
 	Camera LocalCamera;
 	__int64 v1;
@@ -13,13 +13,15 @@ Camera GetCamera(__int64 a1)
 	__int64 v7;
 	__int64 v8;
 
-	v1 = read<__int64>(Localplayer + 0xd0);
-	__int64 v9 = read<__int64>(v1 + 8);
+	v1 = read<__int64>(Localplayer + 0xd5);
+	__int64 v9 = read<__int64>(v1 + 0xc);
 
-	LocalCamera.FieldOfView = 80.f / (read<double>(v9 + 0x680) / 1.19f);
-	LocalCamera.Rotation.x = read<double>(v9 + 0x7D0);
-        LocalCamera.Rotation.y = read<double>(a1 + 0x148);
-
+	LocalCamera.FieldOfView = read<double>(v9 + 0x6DF);
+	
+	LocalCamera.Rotation.x = read<double>(v9 + 0x7D3);
+        LocalCamera.Rotation.y = read<double>(v9 + 0x7DD);
+ 	LocalCamera.Rotation.z = read<double>(v9 + 0x7EC);
+	
         LocalCamera.Location = read<Vector3>(read<__int64>(GWorld + 0x100));
 
 	return VirtualCamera;
@@ -27,7 +29,7 @@ Camera GetCamera(__int64 a1)
 
 Vector3 ProjectWorldToScreen(Vector3 WorldLocation)
 {
-	        Camera vCamera = GetCamera(RootComponent);
+	        Camera vCamera = GetCamera();
 		vCamera.Rotation.x = (asin(vCamera.Rotation.x)) * (180.0 / M_PI);
 
 		D3DMATRIX tempMatrix = Matrix(vCamera.Rotation);
