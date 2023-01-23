@@ -115,8 +115,8 @@ Camera GetCamera(__int64 a1)
 	v1 = read<__int64>(Localplayer + 0xd0);
 	__int64 v9 = read<__int64>(v1 + 8);
 
-	LocalCamera.FieldOfView = 80.f / (read<double>(v9 + 0x680) / 1.19f);
-	LocalCamera.Rotation.x = read<double>(v9 + 0x7D0);
+	LocalCamera.FieldOfView = read<float>(PlayerController + 0x38C) * 90.f);
+	LocalCamera.Rotation.x = read<double>(v9 + 0x9C0);
 	if(!read<uintptr_t>(LocalPawn + 0x23f8))
         LocalCamera.Rotation.y = read<double>(a1 + 0x148);
         else
