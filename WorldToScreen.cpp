@@ -104,7 +104,7 @@ LABEL_13:
     return retstr;
 }
 
-Camera GetCamera(__int64 a1)
+Camera GetCamera(__int64 LocalRoot)
 {
 	Camera LocalCamera;
 	__int64 v1;
@@ -118,7 +118,7 @@ Camera GetCamera(__int64 a1)
 	LocalCamera.FieldOfView = read<float>(PlayerController + 0x38C) * 90.f);
 	LocalCamera.Rotation.x = read<double>(v9 + 0x9C0);
 	if(!read<uintptr_t>(LocalPawn + 0x23f8))
-        LocalCamera.Rotation.y = read<double>(a1 + 0x148);
+        LocalCamera.Rotation.y = read<double>(LocalRoot + 0x148);
         else
 	{
                __int64 ViewportClient = read<__int64>(Localplayer + 0x78);
@@ -129,7 +129,7 @@ Camera GetCamera(__int64 a1)
 LocalCamera.Rotation.y = Buffer.Yaw;
 	}
 
-        LocalCamera.Location = read<Vector3>(read<__int64>(GWorld + 0x100));
+        LocalCamera.Location = read<Vector3>(Localplayer + 0xa0);
 
 	return VirtualCamera;
 }
