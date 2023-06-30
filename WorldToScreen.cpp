@@ -8,7 +8,7 @@ struct CamewaDescwipsion
 CamewaDescwipsion GetViewPoint()
 {
     char v1; // r8
-    CamewaDescwipsion ViewPoint = Read<CamewaDescwipsion>(base_address + 0xf0d7a50);
+    CamewaDescwipsion ViewPoint = Read<CamewaDescwipsion>(base_address + 0xe9ad420);
     BYTE* v2 = (BYTE*)&ViewPoint;
     int i; // edx
     __int64 result; // rax
