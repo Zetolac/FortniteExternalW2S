@@ -122,7 +122,7 @@ CamewaDescwipsion GetViewPoint()
         Rotator(&ViewRotation, &Buffer);
 
         double Yaw = Buffer.Yaw;
-        double Pitch = (asin(read<double>(v2 + 0x888)) * (180.0 / 3.14159265358979323846264338327950288419716939937510));
+        double Pitch = (asin(read<double>(v2 + 0x8d0)) * (180.0 / 3.14159265358979323846264338327950288419716939937510));
         Vector3 CameraLocation = read<Vector3>(v2 + 0x4b0);
         float FOV = read<float>(Localplayer + 0x4CC);
 }
